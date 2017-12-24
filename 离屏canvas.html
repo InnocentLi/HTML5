@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html66>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+        <style type="text/css">
+        #canvas {
+            display: block;
+            margin: 0 auto;
+            border: 1px solid #aaa;
+        }
+        #wm-canvas{
+            display: none;
+            margin: 0 auto;
+            border: 1px solid #aaa; 
+        }
+        #rangediv {
+            display: block;
+            margin: 20px auto;
+            width: 800px;
+        }
+
+        #range {
+            width: 800px;
+        }
+        </style>
+    </head>
+
+    <body>
+        <canvas id="canvas"></canvas>
+        <div id="rangediv">
+            <input type="range" id="range" min="0.5" max="3.0" step="0.01" value="1.0" />
+        </div>
+        <canvas id="wm-canvas"></canvas>
+        <script type="text/javascript">
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext("2d");
+        var range = document.getElementById('range');
+        var image = new Image();
+
+        var wmCanvas = document.getElementById("wm-canvas");
+        var wm = wmCanvas.getContext("2d");
+
+        window.onload = function() {
+
+            canvas.width = 800;
+            canvas.height = 600;
+
+            var scale = range.value;
+            console.log(range.value);
+            
+            image.src = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1513842128483&di=b81cd0c1d9e89f08676c40ad2aef42ae&imgtype=0&src=http%3A%2F%2Fimg1.ph.126.net%2FT3icZALfehhR5H7OFNsiyQ%3D%3D%2F570831252786010651.jpg";
+            image.onload = function() {
+                    drawImageByScale(scale)
+                    range.onmousemove = function(){  	
+                	scale =  range.value;
+                	 drawImageByScale(scale)
+                }
+            }
+           wmCanvas.width = 600;
+           wmCanvas.height = 100;
+           wm.font = "bold 50px Arial";
+           wm.fillStyle = "rgba( 2, 1, 1, 0.5)";
+           wm.textBaseline = "middle";
+           wm.fillText( "我是水印，我是水印" , 20 ,50 );
+
+
+        }
+
+        function drawImageByScale(scale) {
+            var iW = 800 * scale;
+            var iH = 600 * scale;
+            //var index = iW + iH ;
+
+            var sx = canvas.width / 2 - iW / 2;
+            var sy = canvas.height / 2 - iH / 2;
+            console.log(sx, sy);
+            context.clearRect(0,0,canvas.width,canvas.height);  
+            context.drawImage(image, sx, sy, iW, iH);
+           console.log(wmCanvas);
+            context.drawImage( wmCanvas,canvas.width - wmCanvas.width, canvas.height - wmCanvas.height);
+
+        }
+        </script>
+    </body>
+
+    </html>
